@@ -2,11 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using StackExchange.Redis;
 using Libplanet.Crypto;
-using Nekoyume.Blockchain;
 
-namespace NineChronicles.Headless.AccessControlService
+namespace NineChronicles.Headless.Services.AccessControlService
 {
-    public class RedisAccessControlService : IAccessControlService, IMutableAccessControlService
+    public class RedisAccessControlService : IMutableAccessControlService
     {
         private IDatabase _db;
 

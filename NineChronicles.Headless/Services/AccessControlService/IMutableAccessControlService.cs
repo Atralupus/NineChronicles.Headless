@@ -1,9 +1,10 @@
 using Libplanet.Crypto;
 using System.Collections.Generic;
+using Nekoyume.Blockchain;
 
-namespace NineChronicles.Headless.AccessControlService
+namespace NineChronicles.Headless.Services.AccessControlService
 {
-    public interface IMutableAccessControlService
+    public interface IMutableAccessControlService : IAccessControlService
     {
         void DenyAccess(Address address);
         void AllowAccess(Address address);

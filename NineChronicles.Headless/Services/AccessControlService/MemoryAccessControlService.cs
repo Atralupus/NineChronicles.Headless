@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Libplanet.Crypto;
-using Nekoyume.Blockchain;
 
-namespace NineChronicles.Headless.AccessControlService
+namespace NineChronicles.Headless.Services.AccessControlService
 {
-    public class MemoryAccessControlService : IAccessControlService, IMutableAccessControlService
+    public class MemoryAccessControlService : IMutableAccessControlService
     {
         private HashSet<Address> _blocklist = new HashSet<Address>();
 

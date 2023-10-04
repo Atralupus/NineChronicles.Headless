@@ -1,7 +1,6 @@
 using System;
-using Nekoyume.Blockchain;
 
-namespace NineChronicles.Headless.AccessControlService
+namespace NineChronicles.Headless.Services.AccessControlService
 {
     public static class AccessControlServiceFactory
     {
@@ -23,7 +22,7 @@ namespace NineChronicles.Headless.AccessControlService
             SQLite
         }
 
-        public static IAccessControlService CreateAccessControlService(
+        public static IMutableAccessControlService CreateAccessControlService(
             StorageType storageType,
             string? connectionString = null,
             string? initialBlocklist = null

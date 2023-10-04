@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 using Libplanet.Crypto;
-using Nekoyume.Blockchain;
 
-namespace NineChronicles.Headless.AccessControlService
+namespace NineChronicles.Headless.Services.AccessControlService
 {
-    public class SQLiteAccessControlService : IAccessControlService, IMutableAccessControlService
+    public class SQLiteAccessControlService : IMutableAccessControlService
     {
         private const string CreateTableSql =
             "CREATE TABLE IF NOT EXISTS blocklist (address VARCHAR(42))";
