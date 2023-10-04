@@ -1,7 +1,7 @@
 using System;
 using Nekoyume.Blockchain;
 
-namespace Lib9c.Policy.AccessControlService
+namespace NineChronicles.Headless.AccessControlService
 {
     public static class AccessControlServiceFactory
     {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Libplanet.Crypto;
 using Nekoyume.Blockchain;
 
-namespace Lib9c.Policy.AccessControlService
+namespace NineChronicles.Headless.AccessControlService
 {
     public class MemoryAccessControlService : IAccessControlService
     {
