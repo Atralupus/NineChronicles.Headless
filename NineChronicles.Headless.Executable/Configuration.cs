@@ -77,6 +77,11 @@ namespace NineChronicles.Headless.Executable
         public int MaximumPollPeers { get; set; } = int.MaxValue;
         public ActionTypeLoaderConfiguration? ActionTypeLoader { get; set; } = null;
 
+        // AccessControlService
+        public string AcsType { get; set; } = "memory";
+        public string? AcsConnectionString { get; set; } = null;
+        public string? AcsInitialBlocklist { get; set; } = "";
+
         // Consensus
         public string? ConsensusPrivateKeyString { get; set; }
         public string[]? ConsensusSeedStrings { get; set; }
@@ -136,7 +141,10 @@ namespace NineChronicles.Headless.Executable
             string[]? consensusSeedStrings,
             double? consensusTargetBlockIntervalMilliseconds,
             string? sentryDsn,
-            double? sentryTraceSampleRate
+            double? sentryTraceSampleRate,
+            string? acsType,
+            string? acsConnectionString,
+            string? acsInitialBlocklist
         )
         {
             AppProtocolVersionString = appProtocolVersionString ?? AppProtocolVersionString;
@@ -187,6 +195,9 @@ namespace NineChronicles.Headless.Executable
             ConsensusTargetBlockIntervalMilliseconds = consensusTargetBlockIntervalMilliseconds ?? ConsensusTargetBlockIntervalMilliseconds;
             SentryDsn = sentryDsn ?? SentryDsn;
             SentryTraceSampleRate = sentryTraceSampleRate ?? SentryTraceSampleRate;
+            AcsType = acsType ?? AcsType;
+            AcsConnectionString = acsConnectionString ?? AcsConnectionString;
+            AcsInitialBlocklist = acsInitialBlocklist ?? AcsInitialBlocklist;
         }
     }
 }

@@ -206,6 +206,12 @@ namespace NineChronicles.Headless.Executable
             string? configPath = "appsettings.json",
             [Option(Description = "Sentry DSN")]
             string? sentryDsn = "",
+            [Option(Description = "AccessControlService Type")]
+            string? acsType = null,
+            [Option(Description = "AccessControlService ConnectionString")]
+            string? acsConnectionString = null,
+            [Option(Description = "AccessControlService InitialBlocklist")]
+            string? acsInitialBlocklist = "",
             [Option(Description = "Trace sample rate for sentry")]
             double? sentryTraceSampleRate = null,
             [Ignore] CancellationToken? cancellationToken = null
@@ -289,7 +295,7 @@ namespace NineChronicles.Headless.Executable
                 txLifeTime, messageTimeout, tipTimeout, demandBuffer, skipPreload,
                 minimumBroadcastTarget, bucketSize, chainTipStaleBehaviorType, txQuotaPerSigner, maximumPollPeers,
                 consensusPort, consensusPrivateKeyString, consensusSeedStrings, consensusTargetBlockIntervalMilliseconds,
-                sentryDsn, sentryTraceSampleRate
+                sentryDsn, sentryTraceSampleRate, acsType, acsConnectionString, acsInitialBlocklist
             );
 
 #if SENTRY || ! DEBUG
