@@ -206,8 +206,12 @@ namespace NineChronicles.Headless.Executable
             string? configPath = "appsettings.json",
             [Option(Description = "Sentry DSN")]
             string? sentryDsn = "",
+            [Option(Description = "AccessControlService Server")]
+            bool? acsServer = null,
+            [Option(Description = "AccessControlService Server Port")]
+            int? acsPort = null,
             [Option(Description = "AccessControlService Type")]
-            string? acsType = null,
+            string? acsType = "memory",
             [Option(Description = "AccessControlService ConnectionString")]
             string? acsConnectionString = null,
             [Option(Description = "AccessControlService InitialBlocklist")]
@@ -295,7 +299,7 @@ namespace NineChronicles.Headless.Executable
                 txLifeTime, messageTimeout, tipTimeout, demandBuffer, skipPreload,
                 minimumBroadcastTarget, bucketSize, chainTipStaleBehaviorType, txQuotaPerSigner, maximumPollPeers,
                 consensusPort, consensusPrivateKeyString, consensusSeedStrings, consensusTargetBlockIntervalMilliseconds,
-                sentryDsn, sentryTraceSampleRate, acsType, acsConnectionString, acsInitialBlocklist
+                sentryDsn, sentryTraceSampleRate, acsServer, acsPort, acsType, acsConnectionString, acsInitialBlocklist
             );
 
 #if SENTRY || ! DEBUG
@@ -527,6 +531,8 @@ namespace NineChronicles.Headless.Executable
                         service);
                 }
 
+                var tasks = new List<Task>();
+
                 if (headlessConfig.GraphQLServer)
                 {
                     string? secretToken = null;
@@ -557,7 +563,20 @@ namespace NineChronicles.Headless.Executable
                     hostBuilder = graphQLService.Configure(hostBuilder);
                 }
 
-                await hostBuilder.RunConsoleAsync(cancellationToken ?? Context.CancellationToken);
+                if (headlessConfig.AcsServer)
+                {
+                    var acsService = new AcsService(
+                        headlessConfig.AcsType,
+                        headlessConfig.AcsConnectionString,
+                        headlessConfig.AcsInitialBlocklist);
+                    var acsHostBuilder = acsService.Configure(Host.CreateDefaultBuilder(), headlessConfig.AcsPort);
+
+                    tasks.Add(acsHostBuilder.RunConsoleAsync(cancellationToken ?? Context.CancellationToken));
+                }
+
+                tasks.Add(hostBuilder.RunConsoleAsync(cancellationToken ?? Context.CancellationToken));
+
+                await Task.WhenAll(tasks);
             }
             catch (TaskCanceledException)
             {

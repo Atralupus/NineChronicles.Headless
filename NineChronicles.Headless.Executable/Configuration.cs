@@ -78,6 +78,8 @@ namespace NineChronicles.Headless.Executable
         public ActionTypeLoaderConfiguration? ActionTypeLoader { get; set; } = null;
 
         // AccessControlService
+        public bool AcsServer { get; set; } = false;
+        public int AcsPort { get; set; } = 31232;
         public string AcsType { get; set; } = "memory";
         public string? AcsConnectionString { get; set; } = null;
         public string? AcsInitialBlocklist { get; set; } = "";
@@ -142,6 +144,8 @@ namespace NineChronicles.Headless.Executable
             double? consensusTargetBlockIntervalMilliseconds,
             string? sentryDsn,
             double? sentryTraceSampleRate,
+            bool? acsServer,
+            int? acsPort,
             string? acsType,
             string? acsConnectionString,
             string? acsInitialBlocklist
@@ -195,6 +199,8 @@ namespace NineChronicles.Headless.Executable
             ConsensusTargetBlockIntervalMilliseconds = consensusTargetBlockIntervalMilliseconds ?? ConsensusTargetBlockIntervalMilliseconds;
             SentryDsn = sentryDsn ?? SentryDsn;
             SentryTraceSampleRate = sentryTraceSampleRate ?? SentryTraceSampleRate;
+            AcsServer = acsServer ?? AcsServer;
+            AcsPort = acsPort ?? AcsPort;
             AcsType = acsType ?? AcsType;
             AcsConnectionString = acsConnectionString ?? AcsConnectionString;
             AcsInitialBlocklist = acsInitialBlocklist ?? AcsInitialBlocklist;

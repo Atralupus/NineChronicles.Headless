@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -10,18 +11,30 @@ namespace NineChronicles.Headless
 {
     public class AcsService
     {
-        private StandaloneContext StandaloneContext { get; }
+        private readonly string _acsType;
+        private readonly string? _acsConnectionString;
+        private readonly string? _acsInitialBlocklist;
 
-        public AcsService(StandaloneContext standaloneContext)
+        public AcsService(string acsType, string? acsConnectionString, string? acsInitialBlocklist)
         {
-            StandaloneContext = standaloneContext;
+            _acsType = acsType;
+            _acsConnectionString = acsConnectionString;
+            _acsInitialBlocklist = acsInitialBlocklist;
         }
 
         public IHostBuilder Configure(IHostBuilder hostBuilder, int port)
         {
             return hostBuilder.ConfigureWebHostDefaults(builder =>
             {
-                builder.UseStartup(x => new RestApiStartup(x.Configuration, StandaloneContext));
+                builder.UseStartup(
+                    x =>
+                        new RestApiStartup(
+                            x.Configuration,
+                            _acsType,
+                            _acsConnectionString,
+                            _acsInitialBlocklist
+                        )
+                );
                 builder.ConfigureKestrel(options =>
                 {
                     options.ListenAnyIP(
@@ -37,27 +50,36 @@ namespace NineChronicles.Headless
 
         internal class RestApiStartup
         {
-            public RestApiStartup(IConfiguration configuration, StandaloneContext standaloneContext)
+            private readonly string _acsType;
+            private readonly string? _acsConnectionString;
+            private readonly string? _acsInitialBlocklist;
+
+            public RestApiStartup(
+                IConfiguration configuration,
+                string acsType,
+                string? acsConnectionString,
+                string? acsInitialBlocklist
+            )
             {
                 Configuration = configuration;
-                StandaloneContext = standaloneContext;
+                _acsType = acsType;
+                _acsConnectionString = acsConnectionString;
+                _acsInitialBlocklist = acsInitialBlocklist;
             }
 
             public IConfiguration Configuration { get; }
-            public StandaloneContext StandaloneContext;
 
             public void ConfigureServices(IServiceCollection services)
             {
                 services.AddControllers();
 
-                services.AddSingleton(
-                    provider =>
-                        AccessControlServiceFactory.CreateAccessControlService(
-                            AccessControlServiceFactory.StorageType.Memory,
-                            null,
-                            null
-                        )
+                var accessControlService = AccessControlServiceFactory.CreateAccessControlService(
+                    Enum.Parse<AccessControlServiceFactory.StorageType>(_acsType, true),
+                    _acsConnectionString,
+                    _acsInitialBlocklist
                 );
+
+                services.AddSingleton(accessControlService);
             }
 
             public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
